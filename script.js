@@ -73,7 +73,9 @@ class Game {
              data.forEach((catetgories, i) => {
                  let categoryObj = {
                      title: catetgories.title,
-                     clues: [] //array of clues
+                     clues: catetgories.clues//array of clues
+                     //categories.clues
+                    
                  }
          
                  //seprate clues from category
@@ -90,6 +92,7 @@ class Game {
                 //  })
                  
                 console.log(this);
+                console.log(categoryObj)
                 this.categories.push(categoryObj);
 
              })
@@ -108,7 +111,7 @@ class Game {
         block.innerHTML = (`<header>${category.title}</header>
         <ul>
         </ul>`
-     ).trim()
+     )
      this.boardE.appendChild(block);
     }
     
