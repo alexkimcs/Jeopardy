@@ -1,6 +1,7 @@
 
 /*
 Sources Used:
+API: https://jservice.io
 https://www.youtube.com/watch?v=FN_ffvw_ksE
 https://www.javascripttutorial.net/javascript-fetch-api/
 
@@ -31,8 +32,8 @@ class Game {
         this.clues = {};
         //initiaslizes states
         this.current = null;
-         //GET ELEMENTS
-        this.board = e.querySelector(".board");
+         //GET ELEMENTSS
+        this.boardE = e.querySelector(".board");
         this.modal = e.querySelector(".modal");
 
     }
@@ -67,33 +68,53 @@ class Game {
                 }
             ]
             */
-    
+            
             //loop through results category
              data.forEach((catetgories, i) => {
                  let categoryObj = {
                      title: catetgories.title,
                      clues: [] //array of clues
                  }
-                
-                console.log(this);
-                
-                
+         
+                 //seprate clues from category
+                 //spice() - bc we only need 5 
+                //  let cluesArray = clu.forEach((c, j) =>{
+                //     let cId = `${i}:${j}`;
+                //     categoryObj.clues.push(cid);
+                //     this.cluesArray[cId] = {
+                //         answer: c.answer,
+                //         question: c.question,
+                //         // value: c.value
+                //     }
+                //     this.categories.push(categoryObj);
+                //  })
                  
+                console.log(this);
+                this.categories.push(categoryObj);
+
              })
+             this.categories.forEach(c => {
+                this.display(c);
+            })
+
         })
+        
+
     }
+
+    display(category){
+        let block = document.createElement("div");
+        block.classList.add("col");
+        block.innerHTML = (`<header>${category.title}</header>
+        <ul>
+        </ul>`
+     ).trim()
+     this.boardE.appendChild(block);
+    }
+    
 }
 
-function shuffle(a) {
-    var j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-} 
+
 
 
 //new instance of game
