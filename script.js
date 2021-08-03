@@ -22,19 +22,23 @@ https://www.javascripttutorial.net/javascript-fetch-api/
 
 
 class Game {
-    constructor(e, ids = {}) {
+    constructor(e) {
         
-        this.getCategories = ids.getCategories || [17679, 25, 11743, 52, 7200];
-        this.getCategories = [17679, 25, 11743, 52, 7200];
+        // this.getCategories = ids.getCategories || [17679, 25, 11743, 52, 7200];
+        // this.getCategories = [17679, 25, 11743, 52, 7200];
         //store cateegories into seperate arrays
-        this.categories = [];
+    
+         //GET ELEMENTSS
+        this.boardMain = e.querySelector(".board");
+        this.modal = e.querySelector(".modal");
 
+        this.categories = [];
         this.clues = {};
         //initiaslizes states
         this.current = null;
-         //GET ELEMENTSS
-        this.boardE = e.querySelector(".board");
-        this.modal = e.querySelector(".modal");
+
+        // this.getCategories = ids.getCategories || [17679, 25, 11743, 52, 7200];
+        this.getCategories = [17679, 25, 11743, 52, 7200];
 
     }
 
@@ -42,6 +46,8 @@ class Game {
     //this is where everything will be called
     main(){
         this.fetchCategories();
+
+        this.boardE
     }
     //fetch data from API by category
     fetchCategories(){
@@ -70,81 +76,79 @@ class Game {
             */
             
             //loop through results category
-             data.forEach((catetgories, i) => {
+            data.forEach((cat, i) => {
                  let categoryObj = {
-                     title: catetgories.title,
-                     clues: catetgories.clues//array of clues
+                     title: cat.title,
+                     clues: []//array of clues
                      //categories.clues
-                    
                  }
-         
+                 //console.log(cat.clues);
+                 
+                let arr = cat.clues.splice(0,5);
+                console.log(arr);
+                arr.forEach((clu, j) => {
+                     let cId = i + "-" + j;
+                     categoryObj.clues.push(cId);
+                    this.clues[cId] = {
+                        answer: clu.answer,
+                        question: clu.question,
+                        value: clu.value
+                    }
+                 })
+                 
                  //seprate clues from category
                  //spice() - bc we only need 5 
-                //  let cluesArray = clu.forEach((c, j) =>{
-                //     let cId = `${i}:${j}`;
-                //     categoryObj.clues.push(cid);
-                //     this.cluesArray[cId] = {
-                //         answer: c.answer,
-                //         question: c.question,
-                //         // value: c.value
-                //     }
-                //     this.categories.push(categoryObj);
-                //  })
-                 
-                console.log(this);
-                console.log(categoryObj)
+ 
+                
+                console.log(categoryObj.clues[1])
                 this.categories.push(categoryObj);
 
              })
-             this.categories.forEach(c => {
-                this.display(c);
+             this.categories.forEach(e => {
+                this.display(e);
             })
 
         })
         
 
     }
-
-    display(category){
-        let block = document.createElement("div");
-        block.classList.add("col");
-        block.innerHTML = (`<header>${category.title}</header>
+    //this functiion dynamically adds to dom elements
+    //grabbind each specific data into each element/for functinalilty
+    display(elements){
+        //render categories
+        let divs = document.createElement("div");
+        divs.classList.add("col");
+        divs.innerHTML = (`<header>${elements.title}</header>
         <ul>
         </ul>`
+
+        
      )
-     this.boardE.appendChild(block);
+     //rednder clues
+     let ul = divs.querySelector("ul");
+      elements.clues.forEach(cId => {
+         let cls = this.clues[cId];
+         ul.innerHTML += `<li><button data-clue-id=${cId}>${cls.value}</button></li>`
+      })
+     //adds to dom
+     this.boardMain.appendChild(divs);
     }
     
 }
-
+// function shuffle(a) {
+//     var j, x, i;
+//     for (i = a.length - 1; i > 0; i--) {
+//         j = Math.floor(Math.random() * (i + 1));
+//         x = a[i];
+//         a[i] = a[j];
+//         a[j] = x;
+//     }
+//     return a;
+// } 
 
 
 
 //new instance of game
-const trivia = new Game(document.querySelector('.main'), {
-
-})
+const trivia = new Game(document.querySelector('.main'))
 trivia.main();
 
-
-// main(){
-
-// }
-// fetchCatagories(){
-//     let categories = this.getCategories.map(categoryid => {
-//     //asyn function method
-//     return new Promise((resolve, reject) => {
-//         fetch(`https://jservice.io/api/category?id=${category_id}`)
-//         .then(res => res.json())
-//         .then(data => {
-//             resolve(data);
-//             console.log(data);
-//         })
-//         })
-//     });
-//     Promise.all(categories).then(reults => {
-
-//         //loop through results category
-         
-//     })
-// }

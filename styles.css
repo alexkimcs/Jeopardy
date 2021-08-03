@@ -3,14 +3,19 @@
   --gap: 0.15em;
   --text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-* {
+/* * {
   box-sizing: border-box;
-}
-.body {
+} */
+html, body {
+    height: 100%;
+ }
+body {
     color: white;
     font-size: 2vw;
     text-align: center;
     font-family: sans-serif;
+    padding: 2em;
+    background: black;
   }
   
 .header {
@@ -25,6 +30,7 @@
   flex: 1;
   margin-left: var(--gap);
   margin-right: var(--gap);
+
 }
 .board .col header {
   text-transform: capitalize;
@@ -37,4 +43,19 @@
   justify-content: center;
 }
 
-\
+
+
+.board .col button {
+    height: 100%;
+    color: inherit;
+    font-size: 2em;
+    /* -webkit-appearance: none; */
+    border: 0;
+    background: none;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    font-weight:bold;
+
+}
+
