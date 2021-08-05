@@ -18,14 +18,15 @@ class Game {
     this.boardMain = e.querySelector(".board");
     this.modal = e.querySelector(".modal");
     this.modalContent = e.querySelector(".modal-page");
-    this.questions = e.querySelector("#qna");
+    this.askQuestion = e.querySelector("#qna");
+
     this.form = e.querySelector(".form");
 
 
     this.categories = [];
     this.clues = {};
     //initiaslizes states
-    this.current = null;
+    this.chosen = null;
 
     // this.getCategories = ids.getCategories || [17679, 25, 11743, 52, 7200];
     this.getCategories = [17679, 25, 11743, 52, 7200];
@@ -35,11 +36,13 @@ class Game {
   //this is where everything will be called
   main() {
     // console.log(event.target.dataset.cId)
-    this.boardMain.addEventListener("click", (event) => {
-    //   console.log(event.target.dataset.clue);
-
-      if (event.target.dataset) {
-        this.userAction(event);
+    // this.fetchCategories();
+    this.boardMain.addEventListener("click", (e) => {
+      console.log(e.target.dataset.c_id);
+    //   let getClues = this.clues[e.target.dataset.c_id];
+      if (e.target.dataset.c_id) {
+        // console.log(event.target.dataset.c_id);
+        this.userAction(e);
       }
     });
     this.fetchCategories();
@@ -81,17 +84,18 @@ class Game {
         // arry of clues into seprate array
         //limit to 5 clues
         let arr = cat.clues.splice(0, 5);
-        console.log(arr);
+        // console.log(arr);
+
         //loop through clues
         //ad id to clues
         //grab wuestion, answr, value
         arr.forEach((clu, j) => {
-          let cId = i + ":" + j;
-          categoryObj.clues.push(cId);
-          this.clues[cId] = {
+          let c_id = i + "_" + j;
+          categoryObj.clues.push(c_id);
+          this.clues[c_id] = {
             answer: clu.answer,
             question: clu.question,
-            value: clu.value,
+            value: clu.value
           };
         });
 
@@ -100,6 +104,7 @@ class Game {
 
         //push into object created
         console.log(categoryObj.clues[1]);
+        // console.log(categoryObj.clues[])
         this.categories.push(categoryObj);
       });
       //render each element using the objects we've saved
@@ -110,41 +115,41 @@ class Game {
   }
   //this functiion dynamically adds to dom elements
   //grabbind each specific data into each element/for functinalilty
-  display(elements) {
+  display(categoryObj) {
     //render categories
-    let column = document.createElement("div");
-    column.classList.add("col");
-    column.innerHTML = `<header>${elements.title}</header>
+    let render = document.createElement("div");
+    render.classList.add("col");
+    render.innerHTML = (`<header>${categoryObj.title}</header>
         <ul>
-        </ul>`;
+        </ul>`);
     //rednder clues
-    var ul = column.querySelector("ul");
-    elements.clues.forEach(cId => {
-      var clue = this.clues[cId];
-      ul.innerHTML += `<li><button data-clue-id=${cId}>${clue.value}</button></li>`
+    let ul = render.querySelector("ul");
+    categoryObj.clues.forEach(c_id => {
+      let forClue = this.clues[c_id];
+      console.log(this.clues[c_id]);
+      ul.innerHTML += `<li><button data-clue-id=${c_id}>${forClue.value}</button></li>`
     });
-    //  let ul = divs.querySelector("dl");
-    //   elements.clues.forEach(cId => {
-    //      let cls = this.clues[cId];
-    //      ul.innerHTML += `<dt><button data-clue-id=${cId}>${cls.value}</button></dt>`
-    //   })
+
     //adds to dom
-    this.boardMain.appendChild(column);
+    this.boardMain.appendChild(render);
   }
-  userAction(event) {
+  userAction(e) {
     // alert("clicky");
-    let getClue = this.clues[event.target.dataset.cId];
-    this.currentClue = getClue;
-    // this.questionElement.textContent = this.currentClue.question;
-    // this.answerElement.textContent = this.currentClue.answer;
+    let getClues = this.clues[e.target.dataset.cId];
+
+    e.target.classList.add("clicked");
+    this.chosen = getClues;
+
+    this.askQuestion.textContent = this.chosen.question;
+    // this.showAnswertextContent = this.chosen.answer;
     
-    event.target.classList.add("clicked");
+    // event.target.classList.add("clicked");
     this.modalContent.classList.add("visible");
     // this.userInput.focus();
 
 
   }
-//   formSubmit(){
+//   setForm(){
 
 //   }
 }
