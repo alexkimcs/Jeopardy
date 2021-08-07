@@ -3,7 +3,6 @@ Sources Used:
 API: https://jservice.io
 https://www.youtube.com/watch?v=FN_ffvw_ksE
 https://www.javascripttutorial.net/javascript-fetch-api/
-
 */
 
 //fetch categories from API
@@ -20,7 +19,7 @@ class Game {
     this.modalContent = e.querySelector(".modal-page");
     this.askQuestion = e.querySelector("#qna");
 
-    this.form = e.querySelector(".form");
+    this.form = e.querySelector("form");
 
 
     this.categories = [];
@@ -38,13 +37,18 @@ class Game {
     // console.log(event.target.dataset.cId)
     // this.fetchCategories();
     this.boardMain.addEventListener("click", (e) => {
-      console.log(e.target.dataset.c_id);
+    //   console.log(e.target.dataset.c_id);
+    //   console.log(e.target.getAttribute('data-clue-id'))
     //   let getClues = this.clues[e.target.dataset.c_id];
-      if (e.target.dataset.c_id) {
+      if (e.target.getAttribute('data-clue-id')) {
         // console.log(event.target.dataset.c_id);
         this.userAction(e);
       }
     });
+
+    this.form.addEventListener("submit", e => {
+        this.userInput(e);
+    })
     this.fetchCategories();
   }
   //fetch data from API by category
@@ -135,8 +139,8 @@ class Game {
   }
   userAction(e) {
     // alert("clicky");
-    let getClues = this.clues[e.target.dataset.cId];
-
+    let getClues = this.clues[e.target.getAttribute('data-clue-id')];
+    console.log("hello")
     e.target.classList.add("clicked");
     this.chosen = getClues;
 
@@ -149,11 +153,25 @@ class Game {
 
 
   }
-//   setForm(){
-
-//   }
+  userInput(e){
+    let check = (this.form.value) === (this.chosen.answer);
+  }
+  userScore(s) {
+    this.score += s;
+    this.scoreCount.textContent = this.scoreCount;
+  }
 }
 
 //new instance of game
 const trivia = new Game(document.querySelector(".main"));
 trivia.main();
+
+// class Game {
+//    }
+//    userAction(e) {
+//      // alert("clicky");
+// -    let getClues = this.clues[e.target.dataset.cId];
+// +    let getClues = this.clues[e.target.getAttribute('data-clue-id')];
+
+//      e.target.classList.add("clicked");
+//      this.chosen = getClues;
