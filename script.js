@@ -7,7 +7,6 @@ https://www.javascripttutorial.net/javascript-fetch-api/
 
 //fetch categories from API
 
-
 class Game {
   constructor(e) {
     // this.getCategories = [17679, 25, 11743, 52, 7200];
@@ -18,17 +17,18 @@ class Game {
     this.modal = e.querySelector(".modal");
     this.modalContent = e.querySelector(".modal-page");
     this.askQuestion = e.querySelector("#qna");
-
     this.form = e.querySelector("form");
-
+    this.formText = e.querySelector("#ans");
+    this.ansText = e.querySelector("#answer-text");
+    this.getInput = e.querySelector("input[name=inputText");
+    this.scoreText = e.querySelector(".counter");
 
     this.categories = [];
     this.clues = {};
     //initiaslizes states
     this.chosen = null;
-
-    // this.getCategories = ids.getCategories || [17679, 25, 11743, 52, 7200];
     this.getCategories = [17679, 25, 11743, 52, 7200];
+    this.count = 0;
   }
 
   //main function
@@ -37,18 +37,20 @@ class Game {
     // console.log(event.target.dataset.cId)
     // this.fetchCategories();
     this.boardMain.addEventListener("click", (e) => {
-    //   console.log(e.target.dataset.c_id);
-    //   console.log(e.target.getAttribute('data-clue-id'))
-    //   let getClues = this.clues[e.target.dataset.c_id];
-      if (e.target.getAttribute('data-clue-id')) {
+      //   console.log(e.target.dataset.c_id);
+      //   console.log(e.target.getAttribute('data-clue-id'))
+      //   let getClues = this.clues[e.target.dataset.c_id];
+      if (e.target.getAttribute("data-clue-id")) {
         // console.log(event.target.dataset.c_id);
         this.userAction(e);
       }
     });
 
-    this.form.addEventListener("submit", e => {
-        this.userInput(e);
-    })
+    this.form.addEventListener("submit", (e) => {
+      this.userInput(e);
+    });
+    let s = 0;
+    this.scoreCount(0);
     this.fetchCategories();
   }
   //fetch data from API by category
@@ -99,7 +101,7 @@ class Game {
           this.clues[c_id] = {
             answer: clu.answer,
             question: clu.question,
-            value: clu.value
+            value: clu.value,
           };
         });
 
@@ -123,42 +125,60 @@ class Game {
     //render categories
     let render = document.createElement("div");
     render.classList.add("col");
-    render.innerHTML = (`<header>${categoryObj.title}</header>
+    render.innerHTML = `<header>${categoryObj.title}</header>
         <ul>
-        </ul>`);
+        </ul>`;
     //rednder clues
     let ul = render.querySelector("ul");
-    categoryObj.clues.forEach(c_id => {
+    categoryObj.clues.forEach((c_id) => {
       let forClue = this.clues[c_id];
       console.log(this.clues[c_id]);
-      ul.innerHTML += `<li><button data-clue-id=${c_id}>${forClue.value}</button></li>`
+      ul.innerHTML += `<li><button data-clue-id=${c_id}>${forClue.value}</button></li>`;
     });
 
     //adds to dom
     this.boardMain.appendChild(render);
   }
+
+  scoreCount(val) {
+    this.count = +val;
+    this.scoreText.textContent = this.count;
+  }
+
+  userInput(e, input = "") {
+    e.preventDefault();
+    // return input.toLowerCase();
+    // let lower = input.toLowerCase();
+    let check =
+      this.toLower(this.getInput.value) === this.toLower(this.chosen.answer);
+    if (check) {
+      this.scoreCount(this.chosen.value);
+    }
+    // this.getAnswer(check);
+    // return input.toLowerCase();
+  }
+  toLower(input = "") {
+    let lower = input.toLowerCase();
+    return lower;
+  }
+  // getAnswer(check) {
+  //   // this.ansText.style.display = check;
+  //   // this.modal.classList.add("result");
+  //   check
+  // }
   userAction(e) {
     // alert("clicky");
-    let getClues = this.clues[e.target.getAttribute('data-clue-id')];
-    console.log("hello")
+    let getClues = this.clues[e.target.getAttribute("data-clue-id")];
+    console.log("hello");
     e.target.classList.add("clicked");
     this.chosen = getClues;
 
     this.askQuestion.textContent = this.chosen.question;
-    // this.showAnswertextContent = this.chosen.answer;
-    
+    this.ansText = this.chosen.answer;
+
     // event.target.classList.add("clicked");
     this.modalContent.classList.add("visible");
     // this.userInput.focus();
-
-
-  }
-  userInput(e){
-    let check = (this.form.value) === (this.chosen.answer);
-  }
-  userScore(s) {
-    this.score += s;
-    this.scoreCount.textContent = this.scoreCount;
   }
 }
 
