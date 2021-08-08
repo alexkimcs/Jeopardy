@@ -154,18 +154,21 @@ class Game {
     if (check) {
       this.scoreCount(this.chosen.value);
     }
-    // this.getAnswer(check);
+    this.getAnswer(check);
     // return input.toLowerCase();
   }
   toLower(input = "") {
     let lower = input.toLowerCase();
     return lower;
   }
-  // getAnswer(check) {
-  //   // this.ansText.style.display = check;
-  //   // this.modal.classList.add("result");
-  //   check
-  // }
+  getAnswer(check) {
+    // this.ansText.style.display = check;
+    // this.modal.classList.add("result");
+    this.ansText = this.chosen.answer;
+    setTimeout(() => {
+      this.modalContent.classList.remove("visible");
+   }, 1000);
+  }
   userAction(e) {
     // alert("clicky");
     let getClues = this.clues[e.target.getAttribute("data-clue-id")];
